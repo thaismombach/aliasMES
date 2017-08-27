@@ -2,9 +2,12 @@ package teste.alias;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -67,54 +70,62 @@ public class Repo {
 	    file.delete();
 	}
 	
-	public Map<String, Set<String>> getRepoAliases() throws RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException{
+	public List<Alias> getRepoAliases() throws RevisionSyntaxException, AmbiguousObjectException, IncorrectObjectTypeException, IOException{
 		downloadRepo();
 		
 		Repository repo = result.getRepository();
         RevWalk revWalk = new RevWalk( repo ); 
 		ObjectId commitId = repo.resolve( "refs/heads/master" );
 		revWalk.markStart( revWalk.parseCommit( commitId ) );
+		int pos = -1, posE = 0, posN = 0, count = 0; 
+		double maxSimilarityEmail=0.0, maxSimilarityName=0.0, aux;
 		
-		
-		Map<String, Set<String>> userAlias = new HashMap<String, Set<String>>(); 
+		List<Alias> userAlias = new ArrayList<Alias>(); 
 		
 		for( RevCommit commit : revWalk ) {
-		    
+		    //System.out.println(commit.getAuthorIdent().getEmailAddress() + " - " + commit.getAuthorIdent().getName());
 			String email = commit.getAuthorIdent().getEmailAddress().substring(0, commit.getAuthorIdent().getEmailAddress().indexOf('@')); 
+			count = 0; 
+			pos = -1; posE = 0; posN = 0;
+			maxSimilarityEmail=0.0; maxSimilarityName=0.0;
+			for(Alias a: userAlias) { 
+				if(a.checkEqualEmail(email)){
+					pos = count;
+					break; 
+				}
+				else {
+					aux = a.getSimilarityEmail(email, commit.getAuthorIdent().getName()); 
+					if(aux > maxSimilarityEmail){ 
+						maxSimilarityEmail = aux; 
+						posE = count; 
+					}
+					
+					aux = a.getSimilarityName(email, commit.getAuthorIdent().getName()); 
+					if(aux > maxSimilarityName){ 
+						maxSimilarityName = aux; 
+						posN = count; 
+					}
+				}
+					
+				count++;
+			}
 			
-		    if(userAlias.get(email) != null) { 
-		    	userAlias.get(email).add(commit.getAuthorIdent().getName());
-		    }
-		    else { 
-		    	
-		    	Set<Entry<String, Set<String>>> set = userAlias.entrySet();
-				Iterator it = set.iterator();
+			if(pos != -1) { 
+				userAlias.get(pos).addEmail(email);
+				userAlias.get(pos).addName(commit.getAuthorIdent().getName());
 				
-				JaroWinkler jw = new JaroWinkler();
-				Boolean found = false; 
-				while(it.hasNext() && !found){
-					Entry<String, Set<String>> entry = (Entry)it.next();
-					String keyEmail = entry.getKey().substring(0, entry.getKey().indexOf('@'));
-					if(jw.similarity(email, keyEmail) >= 0.8 || jw.similarity(keyEmail, commit.getAuthorIdent().getName()) >= 0.8){
-						userAlias.get(entry.getKey()).add(commit.getAuthorIdent().getName());
-						found = true;
-					}
-					else if(jw.similarity(email, keyEmail) >= 0.6 || jw.similarity(keyEmail, commit.getAuthorIdent().getName()) >= 0.6){
-						for(String s: entry.getValue()) {
-							if(jw.similarity(email, s) >= 0.8 || jw.similarity(s, commit.getAuthorIdent().getName()) >= 0.8){
-								userAlias.get(entry.getKey()).add(commit.getAuthorIdent().getName());
-								found = true; 
-								break;
-							}
-						}
-					}
-				}
-		    	
-				if(!found) {
-					userAlias.put(commit.getAuthorIdent().getEmailAddress(), new HashSet<String>()); 
-					userAlias.get(commit.getAuthorIdent().getEmailAddress()).add(commit.getAuthorIdent().getName());
-				}
-		    }
+			}
+			else if(maxSimilarityEmail >= 0.8) { 
+				userAlias.get(posE).addEmail(email);
+				userAlias.get(posE).addName(commit.getAuthorIdent().getName());
+			}
+			else if(maxSimilarityName >= 0.8) { 
+				userAlias.get(posN).addEmail(email);
+				userAlias.get(posN).addName(commit.getAuthorIdent().getName());
+			}
+			else { 
+				userAlias.add(new Alias(commit.getAuthorIdent().getName(), email));
+			}
 		}
 		
 		deleteDir(localPath);

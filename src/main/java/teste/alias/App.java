@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
@@ -119,24 +120,20 @@ public class App
 //		    }
 //		}
 		
-		Set<Entry<String, Set<String>>> set = repo.getRepoAliases().entrySet();
-		Iterator it = set.iterator();
-		
+		List<Alias> alias = repo.getRepoAliases();
 		Boolean print = false; 
-
-		while(it.hasNext()){
-			Entry<String, Set<String>> entry = (Entry)it.next();
-			//System.out.print(entry.getKey() + ": "); 
+		for(Alias a: alias){
 			
-			for(String s: entry.getValue()) {
+			for(String s: a.getNames()){
 				if(print)
-					System.out.print("-");
-			
+					System.out.print(" - ");
+				
 				System.out.print(s);
 				print = true; 
 			}
-			print = false; 
+			
 			System.out.println();
+			print = false; 
 		}
 		
     }
