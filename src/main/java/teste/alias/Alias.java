@@ -33,12 +33,10 @@ public class Alias {
 		}
 		
 		val1 = val1/emails.size();
-		val2 = val2/emails.size();
+		val2 = val2/names.size();
 		
-		if(val1 > val2)
-			return val1; 
-		else 
-			return val2;
+
+		return (val1+val2)/2; 
 	}
 	
 	public double getSimilarityName(String email, String name){ 
@@ -49,12 +47,9 @@ public class Alias {
 		}
 		
 		val1 = val1/emails.size();
-		val2 = val2/emails.size();
+		val2 = val2/names.size();
 		
-		if(val1 > val2)
-			return val1; 
-		else 
-			return val2;
+		return (val1+val2)/2; 
 	}
 	
 	public void addEmail(String email){

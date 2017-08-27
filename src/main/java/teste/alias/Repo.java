@@ -75,10 +75,10 @@ public class Repo {
 		
 		Repository repo = result.getRepository();
         RevWalk revWalk = new RevWalk( repo ); 
-		ObjectId commitId = repo.resolve( "refs/heads/master" );
+		ObjectId commitId = repo.resolve( "HEAD" );
 		revWalk.markStart( revWalk.parseCommit( commitId ) );
-		int pos = -1, posE = 0, posN = 0, count = 0; 
-		double maxSimilarityEmail=0.0, maxSimilarityName=0.0, aux;
+		int pos = -1, count = 0; 
+		double aux;
 		
 		List<Alias> userAlias = new ArrayList<Alias>(); 
 		
@@ -86,25 +86,16 @@ public class Repo {
 		    //System.out.println(commit.getAuthorIdent().getEmailAddress() + " - " + commit.getAuthorIdent().getName());
 			String email = commit.getAuthorIdent().getEmailAddress().substring(0, commit.getAuthorIdent().getEmailAddress().indexOf('@')); 
 			count = 0; 
-			pos = -1; posE = 0; posN = 0;
-			maxSimilarityEmail=0.0; maxSimilarityName=0.0;
+			pos = -1;
 			for(Alias a: userAlias) { 
 				if(a.checkEqualEmail(email)){
 					pos = count;
 					break; 
 				}
-				else {
-					aux = a.getSimilarityEmail(email, commit.getAuthorIdent().getName()); 
-					if(aux > maxSimilarityEmail){ 
-						maxSimilarityEmail = aux; 
-						posE = count; 
-					}
-					
-					aux = a.getSimilarityName(email, commit.getAuthorIdent().getName()); 
-					if(aux > maxSimilarityName){ 
-						maxSimilarityName = aux; 
-						posN = count; 
-					}
+				else if(a.getSimilarityEmail(email, commit.getAuthorIdent().getName())>=0.80 
+							|| a.getSimilarityName(email, commit.getAuthorIdent().getName())>=0.80){ 
+					pos = count; 
+					break;
 				}
 					
 				count++;
@@ -114,14 +105,6 @@ public class Repo {
 				userAlias.get(pos).addEmail(email);
 				userAlias.get(pos).addName(commit.getAuthorIdent().getName());
 				
-			}
-			else if(maxSimilarityEmail >= 0.8) { 
-				userAlias.get(posE).addEmail(email);
-				userAlias.get(posE).addName(commit.getAuthorIdent().getName());
-			}
-			else if(maxSimilarityName >= 0.8) { 
-				userAlias.get(posN).addEmail(email);
-				userAlias.get(posN).addName(commit.getAuthorIdent().getName());
 			}
 			else { 
 				userAlias.add(new Alias(commit.getAuthorIdent().getName(), email));

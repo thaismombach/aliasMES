@@ -119,10 +119,21 @@ public class App
 //				}
 //		    }
 //		}
-		
+    	
 		List<Alias> alias = repo.getRepoAliases();
 		Boolean print = false; 
 		for(Alias a: alias){
+			
+			for(String s: a.getEmails()){
+				if(print)
+					System.out.print(" - ");
+				
+				System.out.print(s);
+				print = true; 
+			}
+			
+			print = false;
+			System.out.print(": ");
 			
 			for(String s: a.getNames()){
 				if(print)
