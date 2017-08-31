@@ -30,7 +30,7 @@ import info.debatty.java.stringsimilarity.JaroWinkler;
 public class Repo {
 	private String remoteURL; 
 	private Git result;
-	private File localPath;
+	private String localPath;
 	
 	public Repo(String remoteURL){ 
 		this.remoteURL = remoteURL; 
@@ -39,14 +39,15 @@ public class Repo {
 	}
 	
 	private void downloadRepo() {
-		localPath = new File("TesteAlias");
+		localPath = remoteURL.substring(19, remoteURL.length()-4); 
+		localPath = localPath.replace('/', '-');
 		
         System.out.println("Cloning from " + remoteURL + " to " + localPath); 
         
         try {
         	result = Git.cloneRepository()
                 .setURI(remoteURL)
-                .setDirectory(localPath)
+                .setDirectory(new File(localPath))
                 .call(); 
         } catch (InvalidRemoteException e) {
 			// TODO Auto-generated catch block
@@ -78,40 +79,46 @@ public class Repo {
 		ObjectId commitId = repo.resolve( "HEAD" );
 		revWalk.markStart( revWalk.parseCommit( commitId ) );
 		int pos = -1, count = 0; 
-		double aux;
+		double aux, val1, val2;
 		
 		List<Alias> userAlias = new ArrayList<Alias>(); 
 		
 		for( RevCommit commit : revWalk ) {
-		    //System.out.println(commit.getAuthorIdent().getEmailAddress() + " - " + commit.getAuthorIdent().getName());
-			String email = commit.getAuthorIdent().getEmailAddress().substring(0, commit.getAuthorIdent().getEmailAddress().indexOf('@')); 
+			String email = commit.getAuthorIdent().getEmailAddress().toLowerCase(); 
 			count = 0; 
 			pos = -1;
 			for(Alias a: userAlias) { 
 				if(a.checkEqualEmail(email)){
 					pos = count;
 					break; 
-				}
-				else if(a.getSimilarityEmail(email, commit.getAuthorIdent().getName())>=0.80 
-							|| a.getSimilarityName(email, commit.getAuthorIdent().getName())>=0.80){ 
-					pos = count; 
-					break;
-				}
-					
+				}	
 				count++;
 			}
 			
+			if(pos == -1) {
+				count = 0; 
+				for(Alias a: userAlias) { 
+					val1 = a.getSimilarityEmail(email, commit.getAuthorIdent().getName().toLowerCase()); 
+					val2 = a.getSimilarityName(email, commit.getAuthorIdent().getName().toLowerCase());  
+					if(((1-val1)> 0.9 && (1-val2)>0.65)  
+								||((1-val1)> 0.65 && (1-val2)>0.9) ){ 
+						pos = count; 
+						break;
+					}
+						
+					count++;
+				}
+			}
+			
 			if(pos != -1) { 
-				userAlias.get(pos).addEmail(email);
-				userAlias.get(pos).addName(commit.getAuthorIdent().getName());
-				
+				userAlias.get(pos).addUser(email, commit.getAuthorIdent().getName().toLowerCase());
 			}
 			else { 
-				userAlias.add(new Alias(commit.getAuthorIdent().getName(), email));
+				userAlias.add(new Alias(commit.getAuthorIdent().getName().toLowerCase(), email));
 			}
 		}
 		
-		deleteDir(localPath);
+		deleteDir(new File(localPath));
 		return userAlias; 
 	}
 }
