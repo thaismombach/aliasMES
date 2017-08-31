@@ -45,15 +45,17 @@ Para utilizar essa ferramenta basta clonar o projeto Maven deste repositório, e
 
 Exemplo: 
 ```
-https://github.com/viniciusmalloc/producerconsumer.git
+https://github.com/bkolega/ATeam-Project1.git
 ```
 A saída dessa ferramenta é uma lista de usuários identificados apartir de 1 até no número de usuários total de usuários não considerado alias. Para cada usuário é aparesentada uma lista de pares `(email, nome)` que representam as suas contas identificadas como alias. 
 
 Exemplo: 
 ```
-User 1: (vini.martins.7@gmail.com,viniciusmalloc) 
-User 3: (viniciusmalloc@users.noreply.github.com,Vinicius Coelho) 
-User 2: (thais.mombach37@hotmail.com,thaismombach) 
+User 1: (jason@thehowe.net,jason howe) 
+User 2: (roboguy06@gmail.com,david young) 
+User 3: (bkolega@bills-macbook-pro.local,bkolega) (kolanite13@gmail.com,bkolega) 
+User 4: (k174w996@ku.edu,katherine wu) (k174w996@ku.edu,k174w996) 
+User 5: (thais.mombach37@hotmail.com,thaismombach)  
 ```
 
 
