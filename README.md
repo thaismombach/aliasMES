@@ -45,17 +45,40 @@ Para utilizar essa ferramenta basta clonar o projeto Maven deste repositório, e
 
 Exemplo: 
 ```
-https://github.com/bkolega/ATeam-Project1.git
+https://github.com/nicolasgramlich/AndEngine.git
 ```
 A saída dessa ferramenta é uma lista de usuários identificados apartir de 1 até no número de usuários total de usuários não considerado alias. Para cada usuário é aparesentada uma lista de pares `(email, nome)` que representam as suas contas identificadas como alias. 
 
 Exemplo: 
 ```
-User 1: (jason@thehowe.net,jason howe) 
-User 2: (roboguy06@gmail.com,david young) 
-User 3: (bkolega@bills-macbook-pro.local,bkolega) (kolanite13@gmail.com,bkolega) 
-User 4: (k174w996@ku.edu,katherine wu) (k174w996@ku.edu,k174w996) 
-User 5: (thais.mombach37@hotmail.com,thaismombach)  
+Cloning from https://github.com/nicolasgramlich/AndEngine.git to nicolasgramlich-AndEngine
+User 1: (ngramlich@zynga.com,nicolas gramlich) 
+User 2: (ebbybeh@hotmail.com,ebbybeh) 
+User 3: (skennedy@zynga.com,scott kennedy) 
+User 4: (cornel.cocioaba@yahoo.com,korn3l) 
+User 5: (git@winniehell.de,winniehell) 
+User 6: (baseball116@gmail.com,spencer elliott) 
+User 7: (michal.stawinski@sonymobile.com,michal stawinski) (michal.stawinski@sonyericsson.com,michal stawinski) (michal.stawinski@gmail.com,michal stawinski) 
+User 8: (nicolasgramlich@gmail.com,nicolas gramlich (laptop)) (nicolasgramlich@gmail.com,nicolas gramlich) (devnull@localhost,nico) (devnull@localhost,nicolasgramlich) (devnull@localhost,theturtleboy) (devnull@localhost,gil) 
+User 9: (playernumberthree@gmail.com,player_03) 
+User 10: (oleonov@smartru.com,oleonov) 
+User 11: (ivan@vershinin.net,ivan vershinin) 
+User 12: (fish@flowerpotgames.com,fish) 
+User 13: (ebartley@192.168.186.128,ebartley) 
+User 14: (levinotik@gmail.com,levi notik) 
+User 15: (administrator@192.168.186.128,administrator) 
+User 16: (ybrigo@gmail.com,brig) 
+User 17: (xyu@zynga.com,xi yu) 
+User 18: (erik@eloff.se,erik eloff) 
+User 19: (stevosaurus@gmail.com,stevosaurus) 
+User 20: (djpep.dj@gmail.com,sergio viudes) 
+User 21: (recastrodiaz@gmail.com,recastro) 
+User 22: (makers.f@gmail.com,makers_f) 
+User 23: (flashmasterdash@gmail.com,david schreiber) 
+User 24: (janne.sinivirta@gmail.com,janne sinivirta) 
+User 25: (efung@zynga.com,eric fung) 
+User 26: (rodrigo.moraes@gmail.com,rodrigo moraes) 
+User 27: (jeremy.logan@gmail.com,jeremy logan)   
 ```
 
 
