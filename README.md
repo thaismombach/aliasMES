@@ -1,4 +1,4 @@
-# Detecçao de Alias 
+# Detecção de Alias 
 Trabalho da disciplina Manutenção e Evolução de Software para detecção de alias entre os contribuidores de repositórios GitHub.
 
 ## Abordagem
